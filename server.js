@@ -40,8 +40,8 @@ const upload = multer({
 // Nodemailer transporter for Loopia
 const transporter = nodemailer.createTransport({
   host: process.env.EMAIL_HOST || "mailcluster.loopia.se",
-  port: parseInt(process.env.EMAIL_PORT || "587"),
-  secure:  STARTTLS,
+  port: parseInt(process.env.EMAIL_PORT || "465"),
+  secure:  true,
   auth: {
     user: process.env.EMAIL_USER || "Johan.karlsson@globalworker.nu",
     pass: process.env.EMAIL_PASS || "Johan11#",
