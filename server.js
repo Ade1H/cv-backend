@@ -39,15 +39,12 @@ const upload = multer({
 
 // Nodemailer transporter for Loopia
 const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_HOST || "mailcluster.loopia.se",
-  port: parseInt(process.env.EMAIL_PORT || "587"),
-  secure:  false,
+  host: "smtp.resend.com",
+  secure: true,
+  port: 465,
   auth: {
-    user: process.env.EMAIL_USER || "Johan.karlsson@globalworker.nu",
-    pass: process.env.EMAIL_PASS || "Johan11#",
-  },
-  tls: {
-    rejectUnauthorized: false  // Viktigt för Loopia
+    user: "resend",                    // Alltid "resend"
+    pass: "re_911JD9Uu_BUVEqYXLhHXDQ8UtKSwnA5XT"   // Din nyckel från steg 3
   }
 });
 
