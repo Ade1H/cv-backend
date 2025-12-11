@@ -41,13 +41,13 @@ const upload = multer({
 const transporter = nodemailer.createTransport({
   host: process.env.EMAIL_HOST || "mailcluster.loopia.se",
   port: parseInt(process.env.EMAIL_PORT || "587"),
-  secure: false,
+  secure:  STARTTLS,
   auth: {
     user: process.env.EMAIL_USER || "Johan.karlsson@globalworker.nu",
     pass: process.env.EMAIL_PASS || "Johan11#",
   },
   tls: {
-    rejectUnauthorized: false
+    rejectUnauthorized: false  // Viktigt för Loopia
   }
 });
 
@@ -69,9 +69,9 @@ app.post("/api/send-cv", upload.single("cv"), async (req, res) => {
 
   try {
     const mailOptions = {
-      from: process.env.EMAIL_USER || "Johan.karlsson@globalworker.nu",
+      from: process.env.EMAIL_USER,
       replyTo: email,
-      to: process.env.EMAIL_USER || "Johan.karlsson@globalworker.nu",
+      to: process.env.EMAIL_USER,
       subject: "NYTT CV: " + name,
       text: "Namn: " + name + "\n" +
             "E-post: " + email + "\n" +
@@ -98,7 +98,7 @@ app.post("/api/send-cv", upload.single("cv"), async (req, res) => {
     }
 
     await transporter.sendMail(mailOptions);
-    console.log("CV email sent successfully to", process.env.EMAIL_USER || "Johan.karlsson@globalworker.nu");
+    console.log("CV email sent successfully to", process.env.EMAIL_USER);
     
     res.json({ 
       success: true, 
@@ -122,8 +122,8 @@ app.post("/api/send-video", upload.single("video"), async (req, res) => {
 
   try {
     const mailOptions = {
-      from: process.env.EMAIL_USER || "Johan.karlsson@globalworker.nu",
-      to: process.env.EMAIL_USER || "Johan.karlsson@globalworker.nu",
+      from: process.env.EMAIL_USER,
+      to: process.env.EMAIL_USER,
       subject: "NYTT VIDEO CV",
       text: "Ett nytt video CV har skickats via webbplatsen.\n\n" +
             "---\n" +
@@ -145,7 +145,7 @@ app.post("/api/send-video", upload.single("video"), async (req, res) => {
     }
 
     await transporter.sendMail(mailOptions);
-    console.log("Video email sent successfully to", process.env.EMAIL_USER || "Johan.karlsson@globalworker.nu");
+    console.log("Video email sent successfully to", process.env.EMAIL_USER);
     
     res.json({ 
       success: true, 
@@ -171,6 +171,5 @@ app.use((err, req, res, next) => {
   next();
 });
 
-// VIKTIGT: Ändra denna rad!
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log("Backend körs på port " + PORT));
+app.listen(PORT, () => console.log("Backend körs på http://localhost:" + PORT));
